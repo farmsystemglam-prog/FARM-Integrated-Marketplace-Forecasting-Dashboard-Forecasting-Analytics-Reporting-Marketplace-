@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Farmer Directory - F.A.R.M</title>
+  <link rel="stylesheet" href="FarmerDirectory.css" />
+
+</head>
+<body>
+  <div class="container">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="logo">
+        <img src="FARMLogo.png" alt="FARM Logo" />
+      </div>
+      <nav class="nav-menu" role="navigation" aria-label="Main navigation">
+        <a href="SetCustomerProfile.html" class="nav-item">Profile</a>
+        <a href="#" class="nav-item" aria-current="page">Farmer Directory</a>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+      <!-- Top divider line -->
+      <div class="divider divider-top"></div>
+
+      <header class="main-header">
+        <span class="page-title" aria-label="Current page: Farmer Directory">Farmer Directory</span> 
+      </header>
+
+      <section class="today-pick-section" aria-label="Today's Pick products">
+
+        <div class="today-pick-topbar">
+          <h1>Today's Pick</h1>
+          <div class="search-box">
+            <input type="search" id="search-input" aria-label="Search products by Field, Crops, etc." placeholder="Search by Business Name, Location, etc..." />
+            <button class="search-btn" aria-label="Search">
+              <svg width="18" height="18" fill="#c4c3ba" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="product-grid" id="farmer-grid" role="list">
+          <!-- Farmer cards will be loaded here dynamically -->
+        </div>
+      </section>
+    </main>
+
+    <aside class="icon-bar">
+      <div class="profile-dropdown-container">
+        <!-- Profile Button as <a> instead of <button> -->
+        <a id="profileBtn" class="profile-img-btn" aria-haspopup="true" aria-expanded="false">
+          <img src="user-icon.png" alt="Profile" />
+          <svg class="arrow-down" width="14" height="14" fill="#676758" viewBox="0 0 24 24">
+            <path d="M7 10l5 5 5-5H7z"/>
+          </svg>
+        </a>
+
+        <!-- Dropdown -->
+        <div id="dropdownMenu" class="dropdown-menu" role="menu">
+          <a href="HomePage.html" class="dropdown-item">Log Out</a>
+        </div>
+      </div>
+    </aside>
+    
+    <!-- Modal for Farmer Profile -->
+    <div id="farmerModal" class="modal">
+      <div class="modal-content">
+        <button class="close-modal" id="closeModal">&times;</button>
+        
+        <!-- REMOVED HEADER SECTION -->
+        
+        <div class="modal-profile-section">
+          <div class="modal-profile-left">
+            <div class="modal-avatar" id="modalAvatar">
+              <!-- First letter of business name -->
+            </div>
+            
+            <div class="modal-profile-info">
+              <h1 id="modalFarmerBusinessName">Business Name</h1>
+              <small id="modalFarmerLocation">Location</small>
+              <small id="modalFarmerJoined">Joined Date</small>
+              
+              <div class="modal-subinfo" aria-label="Ratings and stats">
+                <div class="stats">
+                  <span id="modalFarmerReviews">0</span> <small>Reviews</small>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="modal-profile-right" aria-label="Farm Description and Actions">
+            <div class="modal-description">
+              <strong>Description</strong>
+              <span id="modalFarmerDescription">Loading farmer description...</span>
+            </div>
+            
+            <div class="modal-categories">
+              <strong>Crop Categories</strong>
+              <div id="modalCategories" class="categories-list">
+                <!-- Categories will be loaded here -->
+              </div>
+            </div>
+            
+            <div class="modal-btn-group">
+              <button class="modal-btn-follow" type="button" aria-label="Follow Farm">
+                <svg viewBox="0 0 24 24">
+                  <path d="M12 5v14m7-7H5" stroke="#333" stroke-width="2" stroke-linecap="round" />
+                </svg>
+                Follow
+              </button>
+              
+              <button class="modal-btn-message" type="button" aria-label="Message Farm">
+                <img src="chat-icon.png" alt="Message Icon" />
+                Message
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="modal-tabs">
+          <div class="modal-tab active" data-tab="crops">Crops</div>
+          <div class="modal-tab" data-tab="reviews">Reviews</div>
+        </div>
+        
+        <div class="modal-tab-panel active" id="modal-crops-panel">
+          <div class="modal-card-list" id="modal-crops-list">
+            <!-- Crops will be loaded here dynamically -->
+          </div>
+        </div>
+        
+        <div class="modal-tab-panel" id="modal-reviews-panel">
+          <div class="modal-reviews-container">
+            <div id="modal-reviews-list">Loading reviews...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Message Modal with Chat Area -->
+    <div id="messageModal" class="modal">
+      <div class="modal-content message-modal-content">
+        <button class="close-modal" id="closeMessageModal">&times;</button>
+        
+        <!-- Chat Header -->
+        <div class="chat-header">
+          <div class="chat-avatar" id="messageAvatar">
+            <!-- First letter of business name -->
+          </div>
+          <div class="chat-info">
+            <div class="chat-name" id="messageFarmerName">Business Name</div>
+          </div>
+          
+          <div class="chat-actions">
+            <button class="chat-action-btn" id="addReviewBtn" aria-label="Add Review">
+              <svg viewBox="0 0 24 24">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+              </svg>
+              Add Review
+            </button>
+          </div>
+        </div>
+        
+        <!-- Chat Messages Area -->
+        <div class="chat-messages" id="chatMessages">
+          <div class="loading-indicator">Loading conversation...</div>
+        </div>
+        
+        <!-- Chat Input Area -->
+        <div class="chat-input-area">
+          <input 
+            type="text" 
+            id="messageInput" 
+            class="chat-input" 
+            placeholder="Type your message..." 
+            aria-label="Message input"
+          />
+          <button id="sendMessage" class="chat-button" aria-label="Send message">
+            <svg viewBox="0 0 24 24">
+              <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Review Modal -->
+    <div id="reviewModal" class="review-modal">
+      <div class="review-modal-content">
+        <div class="review-header">
+          <h2 class="review-title">Add Review</h2>
+          <button class="close-modal" id="closeReviewModal">&times;</button>
+        </div>
+        <form class="review-form" id="reviewForm">
+          <div class="form-group">
+            <label class="form-label">Your Review</label>
+            <textarea class="form-textarea" id="reviewComment" placeholder="Share your experience with this farmer..." required></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">
+              <input type="checkbox" id="anonymousCheckbox" class="form-checkbox">
+              Post anonymously
+            </label>
+          </div>
+          <div class="review-actions">
+            <button type="button" class="btn btn-secondary" id="cancelReview">Cancel</button>
+            <button type="submit" class="btn btn-primary">Submit Review</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Supabase Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0"></script>
+    <script src="FarmerDirectory.js"></script> 
+
+</body>
+</html>

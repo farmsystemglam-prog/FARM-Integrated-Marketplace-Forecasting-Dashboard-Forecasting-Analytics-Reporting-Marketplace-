@@ -1,0 +1,611 @@
+/* Reset */
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: 'Inter', sans-serif;
+}
+
+body{
+    background-color: #e4e3e1;
+    font-size: 14px;
+    height: 100vh;
+    color: #737373;
+}
+
+.container{
+    display:grid;
+    grid-template-columns:180px 1fr 270px;
+    height:100vh;
+}
+
+/* SIDEBAR */
+.sidebar{
+    background:#EEEEEE; /* Changed from #e4e3e1 to #EEEEEE */
+    padding:32px 22px;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+}
+
+.sidebar .logo img{
+    width:85px;
+    height: auto;
+    margin-left:20px;
+}
+
+.nav-menu{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+}
+
+.nav-menu a{
+    text-decoration:none;
+    font-weight:600;
+    font-size:px;
+    color:#737373;
+    padding:8px 14px;
+    border-radius:8px;
+}
+
+/* Added style for "active" link (assuming 'overview' is the active link) */
+.nav-menu a.active {
+    background: #F0E491; /* Background for active link */
+    color: #658C58;
+}
+
+
+.nav-menu a:hover{
+    background:#f9f9aa;
+    color:#5a661f;
+}
+
+/* MAIN AREA */
+.main-content{
+    background:#fffdfc;
+    padding:35px 40px;
+    position:relative;
+    overflow-y: auto;
+}
+
+/* ICON BAR */
+.icon-bar{
+    display: flex;
+    gap: 14px;
+    justify-content: flex-end;
+    position: absolute;
+    top: 16px;
+    right: 24px;
+    z-index: 20;
+}
+
+.message-img-btn,
+.profile-img-btn{
+    width:48px;
+    height:48px;
+    background:#e4e3e1;
+    border:none;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin-top: 8px;;
+}
+
+.message-img-btn img,
+.profile-img-btn img{
+    width:28px;
+    height:28px;
+    border-radius:50%;
+}
+
+.profile-dropdown-container{
+    position:relative;
+}
+
+.dropdown-menu{
+    position:absolute;
+    top:58px;
+    right:0;
+    background:#f7f7f7;
+    border:1px solid #d2d2cc;
+    border-radius:8px;
+    display:none;
+    flex-direction:column;
+    min-width:140px;
+}
+
+.dropdown-item{
+    padding:12px 16px;
+    font-weight:600;
+    color:#454537;
+    text-decoration:none;
+}
+
+.dropdown-item:hover{
+    background:#d7d7c8;
+}
+
+/* BREADCRUMB */
+.breadcrumb {
+    font-size: 16px; /* Changed from 22px to 24px */
+    font-weight: 500;
+    color: #AAB1AD; /* Changed from #cac8bd to #AAB1AD */
+    letter-spacing: 0.5px;
+    padding: 4px 0;
+    margin-bottom: 15px;
+}
+.breadcrumb span{
+    margin:0 6px;
+}
+
+/* TITLE */
+.section-title{
+    font-size:22px;
+    font-weight:700;
+    margin-bottom:22px;
+}
+
+.divider-top {
+    width: 100%;
+    height: 1px;
+    background-color: #AAB1AD;
+    margin-bottom: 20px;
+}
+
+/* TOP CARDS */
+.stats-row{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:18px;
+    margin-bottom:30px;
+}
+
+.stat-card{
+    background:white;
+    border-radius:10px;
+    padding:14px 18px;
+    box-shadow:0 4px 7px rgba(0,0,0,0.07);
+}
+
+.stat-card .label{
+    font-size:13px;
+    color:#AAB1AD;
+}
+
+.stat-card .value{
+    font-size:34px;
+    font-weight:700;
+    margin-top:8px;
+    color:#AAB1AD;
+}
+
+/* GRAPHS */
+.graph-row{
+    display:flex;
+    gap:22px;
+}
+
+.graph-large{
+    flex:1;
+    height:260px;
+    background:#e3e3e3;
+    border-radius:6px;
+}
+
+.graph-small-container{
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+}
+
+.graph-small{
+    width:260px;
+    height:122px;
+    background:#e3e3e3;
+    border-radius:6px;
+}
+
+/* METRICS */
+.metrics-row{
+    margin-top:18px;
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    background:white;
+    box-shadow:0 4px 7px rgba(0,0,0,0.07);
+    border-radius:10px;
+    margin-bottom: 30px;
+}
+
+.metric{
+    padding:18px;
+    text-align:center;
+}
+
+.metric p{
+    font-size:14px;
+    color:#7a7a72;
+}
+
+.metric h3{
+    font-size:22px;
+    margin-top:6px;
+    color:#4b4b4b;
+}
+
+/* TEXT CARD CONTAINER */
+.text-cards-container {
+    background: #f1f1f1;
+    padding: 22px;
+    border-radius: 10px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+    margin-bottom: 28px;
+}
+
+/* TEXT CARDS */
+.text-card {
+    padding: 18px;
+    border-radius: 12px;
+    color: #333;
+    box-shadow: 0 4px 7px rgba(0,0,0,0.07);
+}
+
+.text-card h3 {
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+.text-card p {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.text-card small {
+    font-size: 12px;
+    color: #000000;
+}
+
+
+/* COLORS */
+.text-card.p1 { 
+    background: #F0E491;   /* light yellow */
+    color: #4f4a26;
+}
+
+.text-card.p2 { 
+    background: #BBC863;   /* yellow green */
+    color: #3f4a15;
+}
+
+.text-card.p3 { 
+    background: #658C58;   /* moss green */
+    color: #e6f2e3;
+}
+
+.text-card.p4 { 
+    background: #31694E;   /* deep forest green */
+    color: #e6f7eb;
+}
+
+
+
+/* Logo Row Style */
+.logos-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 7px rgba(0,0,0,0.07);
+    margin-top: 22px;
+}
+
+.logo-box {
+    text-align: center;
+    padding: 14px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.logo-box:hover {
+    background: #f4f4f4;
+    border-radius: 8px;
+}
+
+.logo-box img {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    margin-bottom: 10px;
+}
+
+.logo-box p {
+    font-size: 14px;
+    color: #6b6b6b;
+    font-weight: 600;
+}
+
+
+/* RIGHT SIDEBAR */
+.right-sidebar{
+    background:#f3f3f3;
+    padding:30px 22px;
+    display:flex;
+    flex-direction:column;
+    gap:28px;
+}
+
+.weather-card{
+    background:white;
+    padding:20px 26px;
+    text-align:center;
+    border-radius:10px;
+    box-shadow:0 4px 7px rgba(0,0,0,0.07);
+}
+
+.weather-card h1{
+    font-size:46px;
+    color:#4b4b4b;
+}
+
+.month{
+    font-size:14px;
+    color:#818181;
+    margin-bottom:14px;
+}
+
+.temp-box{
+    background:#6f9162;
+    padding:14px;
+    border-radius:10px;
+    color:white;
+}
+
+.temp{
+    font-size:30px;
+    font-weight:700;
+}
+
+.desc{
+    font-size:13px;
+    margin-left:6px;
+}
+
+/* ================================
+   RESPONSIVE ADJUSTMENTS
+================================ */
+@media (max-width: 1200px) {
+    .container {
+        grid-template-columns: 140px 1fr 220px;
+    }
+
+    .sidebar {
+        padding: 24px 16px;
+    }
+
+    .sidebar .logo img {
+        width: 70px;
+    }
+
+    .main-content {
+        padding: 28px 32px;
+    }
+
+    .stats-row {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 14px;
+    }
+
+    .graph-small {
+        width: 220px;
+    }
+
+    .right-sidebar {
+        padding: 24px 16px;
+        gap: 20px;
+    }
+}
+
+@media (max-width: 992px) {
+    .container {
+        grid-template-columns: 120px 1fr 180px;
+    }
+
+    .sidebar {
+        padding: 16px 12px;
+    }
+
+    .sidebar .logo img {
+        width: 60px;
+    }
+
+    .nav-menu a {
+        font-size: 13px;
+        padding: 6px 10px;
+    }
+
+    .main-content {
+        padding: 20px;
+    }
+
+    .stats-row {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    .stat-card {
+        padding: 12px 16px;
+    }
+
+    .stat-card .value {
+        font-size: 28px;
+    }
+
+    .graph-row {
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .graph-large {
+        height: 200px;
+    }
+
+    .graph-small-container {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .graph-small {
+        flex: 1;
+        min-width: 150px;
+    }
+
+    .metrics-row {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .text-cards-container {
+        grid-template-columns: 1fr;
+        padding: 16px;
+    }
+
+    .logos-row {
+        grid-template-columns: repeat(2, 1fr);
+        padding: 16px;
+    }
+
+    .right-sidebar {
+        padding: 16px 12px;
+        gap: 16px;
+    }
+
+    .weather-card {
+        padding: 16px 18px;
+    }
+
+    .weather-card h1 {
+        font-size: 36px;
+    }
+}
+
+@media (max-width: 768px) {
+    .section-title {
+        font-size: 18px;
+        margin-bottom: 16px;
+    }
+
+    .stats-row {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .stat-card {
+        padding: 10px 14px;
+    }
+
+    .stat-card .value {
+        font-size: 24px;
+    }
+
+    .metrics-row {
+        grid-template-columns: 1fr;
+        padding: 12px;
+    }
+
+    .metric {
+        padding: 14px;
+    }
+
+    .metric h3 {
+        font-size: 18px;
+    }
+
+    .logos-row {
+        grid-template-columns: 1fr;
+    }
+
+    .icon-bar {
+        top: 10px;
+        right: 16px;
+    }
+
+    .message-img-btn,
+    .profile-img-btn {
+        width: 40px;
+        height: 40px;
+    }
+
+    .message-img-btn img,
+    .profile-img-btn img {
+        width: 24px;
+        height: 24px;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-content {
+        padding: 16px;
+    }
+
+    .breadcrumb {
+        font-size: 18px;
+        margin-bottom: 12px;
+    }
+
+    .section-title {
+        font-size: 16px;
+        margin-bottom: 14px;
+    }
+
+    .divider-top {
+        margin-bottom: 18px;
+    }
+
+    .stat-card .label {
+        font-size: 12px;
+    }
+
+    .stat-card .value {
+        font-size: 20px;
+        margin-top: 6px;
+    }
+
+    .graph-large {
+        height: 150px;
+    }
+
+    .graph-small {
+        height: 100px;
+    }
+
+    .text-cards-container {
+        padding: 12px;
+        gap: 12px;
+    }
+
+    .text-card {
+        padding: 12px;
+    }
+
+    .text-card h3 {
+        font-size: 15px;
+        margin-bottom: 4px;
+    }
+
+    .text-card p {
+        font-size: 14px;
+    }
+
+    .weather-card {
+        padding: 16px 20px;
+    }
+
+    .weather-card h1 {
+        font-size: 32px;
+    }
+}

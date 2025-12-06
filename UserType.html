@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Select User Type – F.A.R.M</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background: linear-gradient(180deg, #31694E, #658C58);
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.card {
+  background: white;
+  width: clamp(280px, 90vw, 520px);
+  padding: clamp(40px, 6vw, 60px) clamp(20px, 5vw, 40px) clamp(20px, 4vw, 40px);
+  position: relative;
+  border-radius: clamp(15px, 4vw, 25px);
+  text-align: center;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+}
+
+.card h1 {
+  font-size: clamp(32px, 8vw, 50px);
+  margin-bottom: clamp(20px, 3vw, 30px);
+  margin-top: 10px;
+  color:#31694E
+}
+
+.pin-icon {
+  width: clamp(50px, 8vw, 90px);
+  margin: 0;
+  display: block;
+  /* position relative to the card so the logo sits just above the card's top-left */
+  position: absolute;
+  top: calc(-1 * clamp(100px, 4vw, 48px));
+  left: clamp(30px, 3vw, 40px);
+  z-index: 6;
+}
+
+/* ADD MORE SPACE BETWEEN USER OPTIONS */
+.options {
+  display: flex;
+  justify-content: center;
+  gap: clamp(20px, 5vw, 35px);
+  margin: clamp(25px, 4vw, 35px) 0;
+  flex-wrap: wrap;
+  padding: clamp(24px, 4vw, 32px);
+  background: #e8e8e8;
+  border-radius: clamp(12px, 3vw, 18px);
+}
+
+.user-option {
+  width: clamp(110px, 25vw, 135px);
+  padding: clamp(16px, 3vw, 22px);
+  background: white;
+  border-radius: clamp(12px, 3vw, 15px);
+  cursor: pointer;
+  transition: 0.25s ease;
+  border: 3px solid transparent;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.user-option img {
+  width: clamp(50px, 15vw, 75px);
+  margin-bottom: clamp(5px, 2vw, 8px);
+  transition: filter 0.25s ease, transform 0.25s ease;
+  /* start slightly desaturated/gray */
+  filter: grayscale(1) brightness(0.9);
+}
+
+.user-option p {
+  font-size: clamp(14px, 3vw, 18px);
+  margin: 0;
+}
+
+.user-option:hover {
+  background: linear-gradient(to bottom, #658C58 0%, #31694E 100%);
+  color: white;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.user-option:hover img,
+.user-option.active img {
+  /* make the vector/logo appear white on dark background */
+  filter: brightness(0) invert(1);
+  transform: scale(1.05);
+}
+
+.user-option.active {
+  background: linear-gradient(to bottom, #658C58 0%, #31694E 100%);
+  color: white;
+  border-color: rgba(13,63,47,0.9);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.description {
+  font-size: clamp(14px, 2.5vw, 16px);
+  color: #AAB1AD;
+  min-height: 40px;
+  margin-bottom: clamp(20px, 3vw, 30px);
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: clamp(10px, 2vw, 15px);
+  position: relative;
+  margin-top: clamp(20px, 3vw, 30px);
+}
+
+.back-btn {
+  text-decoration: none;
+  color: #737373;
+  font-size: clamp(14px, 2vw, 16px);
+  font-weight: bold;
+}
+
+#continueBtn {
+  padding: clamp(10px, 2vw, 12px) clamp(24px, 4vw, 32px);
+  background: #F0E491;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: clamp(14px, 2vw, 16px);
+  color: #31694E;
+  font-weight: bold;
+  transition: 0.25s;
+}
+
+#continueBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .card {
+    width: 90%;
+    padding: 40px 20px 20px; /* maintain top spacing for small logo */
+  }
+
+  .pin-icon {
+    /* smaller absolute offsets on small screens (sit just above card) */
+    top: calc(-1 * clamp(60px, 6vw, 28px));
+    left: clamp(12px, 4vw, 20px);
+    width: clamp(36px, 12vw, 56px);
+  }
+}
+
+</style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="card">
+      <a href="SignIn.html">
+        <img id="pinAdmin" class="pin-icon" src="FARM_white.png" alt="Pin Icon">
+      </a>
+      <h1>Select User Type</h1>
+
+      <div class="options">
+        <div class="user-option" data-role="farmer">
+          <img src="farmer-icon.png" alt="Farmer Icon">
+          <p>Farmer</p>
+        </div>
+
+        <div class="user-option" data-role="customer">
+          <img src="customer-icon.png" alt="Customer Icon">
+          <p>Customer</p>
+        </div>
+        </div>
+  
+
+      <p id="roleDescription" class="description">
+        Select a role to see its description.
+      </p>
+
+      <div class="actions">
+        <a href="Homepage.html" class="back-btn">BACK</a>
+        <button id="continueBtn" disabled>Continue</button>
+      </div>
+      
+      <div id="error-message" class="error-message" style="display: none;"></div>
+      <div id="shortcut-hint" class="shortcut-hint" style="display: none;">
+        Press 'A' 3 times to reveal admin option
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const desc = document.getElementById("roleDescription");
+    const continueBtn = document.getElementById("continueBtn");
+    const errorMessage = document.getElementById("error-message");
+    const shortcutHint = document.getElementById("shortcut-hint");
+    const adminOption = document.querySelector('.hidden-admin');
+    
+    // Keyboard shortcut for admin
+    let keyPressCount = 0;
+    const keySequence = ['a', 'a', 'a']; // Press 'A' three times
+    
+    document.addEventListener('keydown', (e) => {
+      const key = e.key.toLowerCase();
+      
+      if (key === keySequence[keyPressCount]) {
+        keyPressCount++;
+        
+        if (keyPressCount === keySequence.length) {
+          // Reveal admin option
+          adminOption.classList.remove('hidden-admin');
+          adminOption.classList.add('revealed');
+          adminOption.style.display = 'flex';
+          
+          // Show hint once
+          if (shortcutHint.style.display === 'none') {
+            shortcutHint.style.display = 'block';
+            setTimeout(() => {
+              shortcutHint.style.display = 'none';
+            }, 5000);
+          }
+          
+          // Reset counter
+          keyPressCount = 0;
+        }
+      } else {
+        // Reset counter if sequence is broken
+        keyPressCount = 0;
+      }
+    });
+
+    if (desc && continueBtn) {
+        const descriptions = {
+            admin: "Manages the platform, monitors analytics, and controls overall user and system operations.",
+            farmer: "Manages farm details, tracks crop production, and updates product availability.",
+            customer: "Finds products, buys items from farmers, and interacts with the marketplace."
+        };
+
+        document.querySelectorAll(".user-option").forEach(option => {
+            const role = option.dataset.role;
+
+            option.addEventListener("mouseenter", () => {
+                desc.textContent = descriptions[role];
+            });
+
+            option.addEventListener("mouseleave", () => {
+                const active = document.querySelector(".user-option.active");
+                desc.textContent = active ? descriptions[active.dataset.role] : "Select a role to see its description.";
+            });
+
+            option.addEventListener("click", () => {
+                document.querySelectorAll(".user-option").forEach(o => o.classList.remove("active"));
+                option.classList.add("active");
+                continueBtn.disabled = false;
+                localStorage.setItem("selectedRole", role);
+                desc.textContent = descriptions[role];
+            });
+        });
+
+        continueBtn.addEventListener("click", () => {
+            const selectedRole = localStorage.getItem("selectedRole");
+            if (!selectedRole) {
+                showError("Please select a role first.");
+                return;
+            }
+            
+            // Validate the selected role
+            const validRoles = ["admin", "farmer", "customer"];
+            if (!validRoles.includes(selectedRole)) {
+                showError("Invalid role selected. Please choose again.");
+                return;
+            }
+
+            window.location.href = "SignIn.html";
+        });
+    }
+
+    // PIN admin direct access
+    const pinAdmin = document.getElementById("pinAdmin");
+    if (pinAdmin) {
+        pinAdmin.addEventListener("click", (e) => {
+            e.preventDefault(); // Prevent the default link behavior
+            localStorage.setItem("selectedRole", "admin");
+            showSuccess("Admin access granted. Redirecting to sign in...");
+            
+            // Redirect to sign in page after a short delay
+            setTimeout(() => {
+                window.location.href = "SignIn.html";
+            }, 1500);
+        });
+    }
+
+    // Utility functions for showing messages
+    function showError(message) {
+        errorMessage.textContent = message;
+        errorMessage.style.display = 'block';
+        setTimeout(() => {
+            errorMessage.style.display = 'none';
+        }, 5000);
+    }
+
+    function showSuccess(message) {
+        // Create a temporary success message
+        const successMsg = document.createElement('div');
+        successMsg.className = 'success-message';
+        successMsg.textContent = message;
+        document.querySelector('.card').appendChild(successMsg);
+        
+        setTimeout(() => {
+            successMsg.remove();
+        }, 3000);
+    }
+  </script>
+</body>
+</html>

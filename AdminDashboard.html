@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard – FARM</title>
+    <link rel="stylesheet" href="AdminDashboard.css">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="logo">
+                <img src="FARMLogo.png" alt="FARM Logo">
+            </div>
+
+            <nav class="nav-menu">
+                <a class="active" href="#">Overview</a>
+                <a href="AdminAnalytics.html">Analytics</a>
+                <a href="AdminReports.html">Reports</a>
+            </nav>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+
+            <!-- ICON BAR -->
+            <aside class="icon-bar">
+
+                <div class="profile-dropdown-container">
+                    <button id="profileBtn" class="profile-img-btn">
+                        <img src="user-icon.png" alt="Profile">
+                    </button>
+
+                    <div id="dropdownMenu" class="dropdown-menu">
+                        <a href="HomePage.html" class="dropdown-item">Log Out</a>
+                    </div>
+                </div>
+            </aside>
+
+            <h1 class="dashboard-title">Dashboard</h1>
+            <p class="welcome">Welcome back, <strong>Admin</strong>!</p>
+
+            <!-- TOP METRICS -->
+            <div class="stats-row">
+
+                <div class="stat-card">
+                    <p class="label">Total Active Users</p>
+                    <h2 class="value">0</h2>
+                </div>
+
+                <div class="stat-card">
+                    <p class="label">Total Farmers</p>
+                    <h2 class="value">0</h2>
+                </div>
+
+                <div class="stat-card">
+                    <p class="label">Total Customers</p>
+                    <h2 class="value">0</h2>
+                </div>
+
+            </div>
+
+            <button class="manage-edit-btn" id="manageEditBtn">Manage/Edit</button>
+
+
+            <!-- CENTER SUGGESTIONS GRID -->
+            <div class="suggestion-grid">
+
+                <div class="card green">
+                    <h3>Optimal Pricing Suggestion</h3>
+                    <p class="amount">₱310 – ₱330 / Ton</p>
+                    <small>Based on high regional demand for Corn.</small>
+                </div>
+
+                <div class="card purple">
+                    <h3>High-Demand Crop Alert</h3>
+                    <p class="amount">Organic Soy</p>
+                    <small>Demand has spiked 18% in the last 48 hours.</small>
+                </div>
+
+                <div class="card yellow">
+                    <h3>Best Time to Post</h3>
+                    <p class="amount">Tuesdays, 9:00 AM PST</p>
+                    <small>75% of buyers log in before 10 AM.</small>
+                </div>
+
+                <div class="card blue">
+                    <h3>Inventory Balancing Tips</h3>
+                    <p class="amount">Bundle Wheat & Corn</p>
+                    <small>Offer discounts on bundles to clear surplus stock.</small>
+                </div>
+
+            </div>
+
+        </main>
+
+        <!-- RIGHT SIDEBAR -->
+        <aside class="right-sidebar">
+
+            <div class="weather-card">
+                <h1 id="day1-date">21</h1>
+                <p id="day1-month" class="month">November</p>
+                <div class="temp-box">
+                    <span id="day1-temp" class="temp">0°</span>
+                    <span id="day1-desc" class="desc">Mostly ---</span>
+                </div>
+            </div>
+
+            <div class="weather-card">
+                <h1 id="day2-date">22</h1>
+                <p id="day2-month" class="month">November</p>
+                <div class="temp-box">
+                    <span id="day2-temp" class="temp">0°</span>
+                    <span id="day2-desc" class="desc">Mostly ---</span>
+                </div>
+            </div>
+
+            <div class="weather-card">
+                <h1 id="day3-date">23</h1>
+                <p id="day3-month" class="month">November</p>
+                <div class="temp-box">
+                    <span id="day3-temp" class="temp">0°</span>
+                    <span id="day3-desc" class="desc">---</span>
+                </div>
+            </div>  
+
+        </aside>
+
+    </div>
+
+    <script>
+        // Dropdown toggle
+    const profileBtn = document.getElementById("profileBtn");
+    const dropdownMenu = document.getElementById("dropdownMenu");
+
+    profileBtn.addEventListener("click", () => {
+        dropdownMenu.style.display =
+            dropdownMenu.style.display === "flex" ? "none" : "flex";
+    });
+
+    document.addEventListener("click", (e) => {
+        if (!profileBtn.contains(e.target) && !dropdownMenu.contains(e.target)) {
+            dropdownMenu.style.display = "none";
+        }
+    });
+
+    // WEATHER API CONFIG
+    const API_KEY = "c808ae1a3efb9ae9248b1c893e5f6645";  // same key as FarmerDashboard
+    const CITY = "Batangas,PH";
+
+    // LOAD WEATHER (same system as FarmerDashboard)
+    async function loadWeather() {
+        try {
+            const url = `https://api.openweathermap.org/data/2.5/forecast?q=${CITY}&units=metric&appid=${API_KEY}`;
+            const res = await fetch(url);
+            const data = await res.json();
+
+            let days = {};
+
+            data.list.forEach(entry => {
+                const date = new Date(entry.dt_txt);
+                const d = date.getDate();
+                if (!days[d]) days[d] = entry;
+            });
+
+            const sorted = Object.keys(days).slice(0, 3);
+
+            sorted.forEach((day, i) => {
+                const info = days[day];
+
+                document.getElementById(`day${i+1}-date`).textContent = day;
+
+                document.getElementById(`day${i+1}-month`).textContent =
+                    new Date(info.dt_txt).toLocaleString("en-US", { month: "long" });
+
+                document.getElementById(`day${i+1}-temp`).textContent =
+                    Math.round(info.main.temp) + "°";
+
+                document.getElementById(`day${i+1}-desc`).textContent =
+                    info.weather[0].description;
+            });
+
+        } catch (error) {
+            console.error("Weather fetch failed:", error);
+        }
+    }
+
+    loadWeather();
+
+    // =============================
+    // MANAGE / EDIT SUGGESTION GRID
+    // =============================
+    const manageBtn = document.getElementById("manageEditBtn");
+    let editMode = false;
+
+    manageBtn.addEventListener("click", () => {
+        const editableFields = document.querySelectorAll(".suggestion-grid h3, .suggestion-grid .amount, .suggestion-grid small");
+
+        if (!editMode) {
+            // TURN ON EDIT MODE
+            editableFields.forEach(field => {
+                field.setAttribute("contenteditable", "true");
+                field.style.outline = "2px dashed #31694E"; 
+                field.style.padding = "4px";
+                field.style.borderRadius = "4px";
+            });
+
+            manageBtn.textContent = "Save";
+            manageBtn.style.background = "#658C58"; // lighter green when saving
+
+            editMode = true;
+
+        } else {
+            // TURN OFF EDIT MODE
+            editableFields.forEach(field => {
+                field.removeAttribute("contenteditable");
+                field.style.outline = "none";
+                field.style.padding = "0px";
+            });
+
+            manageBtn.textContent = "Manage/Edit";
+            manageBtn.style.background = "#31694E"; // original green
+
+            editMode = false;
+
+            // OPTIONAL: Save Data in LocalStorage
+            saveSuggestionEdits();
+        }
+    });
+
+    // OPTIONAL: Save edits locally
+    function saveSuggestionEdits() {
+        const cards = document.querySelectorAll(".suggestion-grid .card");
+        let data = [];
+
+        cards.forEach(card => {
+            const title = card.querySelector("h3").textContent;
+            const amount = card.querySelector(".amount").textContent;
+            const desc = card.querySelector("small").textContent;
+
+            data.push({ title, amount, desc });
+        });
+
+        localStorage.setItem("suggestionGridEdits", JSON.stringify(data));
+    }
+
+    // OPTIONAL: Load saved data when page opens
+    window.addEventListener("load", () => {
+        const saved = JSON.parse(localStorage.getItem("suggestionGridEdits"));
+
+        if (saved) {
+            const cards = document.querySelectorAll(".suggestion-grid .card");
+            cards.forEach((card, index) => {
+                card.querySelector("h3").textContent = saved[index].title;
+                card.querySelector(".amount").textContent = saved[index].amount;
+                card.querySelector("small").textContent = saved[index].desc;
+            });
+        }
+    });
+
+    </script>
+</body>
+</html>

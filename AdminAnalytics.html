@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Analytics – FARM</title>
+    <link rel="stylesheet" href="AdminAnalytics.css">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="logo">
+                <img src="FARMLogo.png" alt="FARM Logo">
+            </div>
+
+            <nav class="nav-menu">
+                <a href="AdminDashboard.html">Overview</a>
+                <a class="active" href="#">Analytics</a>
+                <a href="AdminReports.html">Reports</a>
+            </nav>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+
+            <!-- ICON BAR -->
+            <aside class="icon-bar">
+
+                <div class="profile-dropdown-container">
+                    <button id="profileBtn" class="profile-img-btn">
+                        <img src="user-icon.png" alt="Profile">
+                    </button>
+
+                    <div id="dropdownMenu" class="dropdown-menu">
+                        <a href="HomePage.html" class="dropdown-item">Log Out</a>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- TOP TITLE -->
+            <h1 class="dashboard-title">Analytics</h1>
+
+            <!-- FILTER BAR -->
+            <div class="filter-card">
+                <div class="filter-group">
+                    <label>Date Range</label>
+                    <select>
+                        <option>Last 30 Days</option>
+                        <option>Last 7 Days</option>
+                        <option>Last 90 Days</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label>Crop Type</label>
+                    <select>
+                        <option>All Crops</option>
+                        <option>Vegetables</option>
+                        <option>Fruits</option>
+                        <option>Grains</option>
+                        <option>Legumes</option>
+                        <option>Herbs</option>
+                        <option>Beans</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- STATS ROW -->
+            <div class="stats-row">
+                <div class="stat-card">
+                    <p class="label">Total Yield</p>
+                    <h2 class="value">0</h2>
+                </div>
+
+                <div class="stat-card">
+                    <p class="label">Total Revenue</p>
+                    <h2 class="value">0</h2>
+                </div>
+
+                <div class="stat-card">
+                    <p class="label">Platform Engagement</p>
+                    <h2 class="value">0</h2>
+                </div>
+            </div>
+
+            <!-- VALUE-PROP PLACEHOLDER BELOW STATS ROW -->
+            <div class="placeholder-wrapper">
+                <div class="placeholder-card">
+                    <h2 class="placeholder-title">Analytics Data Awaiting</h2>
+
+                    <div class="placeholder-inner">
+                        <span class="placeholder-icon">💸</span>
+
+                        <h3 class="placeholder-heading">Unlock Data-Driven Profit</h3>
+
+                        <p class="placeholder-description">
+                            Your personalized analytics dashboard is where we turn raw data into strategic advantage.
+                            You're just a few transactions away from seeing:
+                        </p>
+
+                        <ul class="placeholder-list">
+                            <li>The optimal price for your next commodity post.</li>
+                            <li>The specific fields driving the highest ROI.</li>
+                            <li>Real-time alerts that protect your yield.</li>
+                        </ul>
+
+                        <p class="placeholder-footer">
+                            Listing your first product on the Marketplace is typically the fastest way to populate this dashboard!
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+
+        </main>
+
+        
+
+        <!-- RIGHT SIDEBAR -->
+        <aside class="right-sidebar">
+
+            <div class="rightbox-products">
+
+                <div class="rightbox-content">
+
+                    <h2 class="rightbox-title">Top Marketplace<br>Products</h2>
+
+                    <div class="rightbox-header">
+                        <span>Product</span>
+                        <span>Revenue</span>
+                    </div>
+
+                    <div class="rightbox-row">
+                        <span class="product-name">Product 1</span>
+                        <span class="product-value">PHP ---</span>
+                    </div>
+                    <div class="divider"></div>
+
+                    <div class="rightbox-row">
+                        <span class="product-name">Product 2</span>
+                        <span class="product-value">PHP ---</span>
+                    </div>
+                    <div class="divider"></div>
+
+                    <div class="rightbox-row">
+                        <span class="product-name">Product 3</span>
+                        <span class="product-value">PHP ---</span>
+                    </div>
+                    <div class="divider"></div>
+
+
+                    <!-- Button goes here but stays at bottom via flex -->
+                    <button class="manage-edit-inside">Manage/Edit</button>
+
+                </div>
+
+            </div>
+
+
+
+        </aside>
+
+
+    </div>
+
+    <script>
+        // PROFILE DROPDOWN
+    const profileBtn = document.getElementById("profileBtn");
+    const dropdownMenu = document.getElementById("dropdownMenu");
+
+    profileBtn.addEventListener("click", () => {
+        dropdownMenu.style.display =
+            dropdownMenu.style.display === "flex" ? "none" : "flex";
+    });
+
+    document.addEventListener("click", (e) => {
+        if (!profileBtn.contains(e.target) && !dropdownMenu.contains(e.target)) {
+            dropdownMenu.style.display = "none";
+        }
+    });
+
+    // Toggle Edit Mode for Right Sidebar
+    const editBtn = document.querySelector(".manage-edit-inside");
+    let editMode = false;
+
+    editBtn.addEventListener("click", () => {
+        const names = document.querySelectorAll(".product-name");
+        const values = document.querySelectorAll(".product-value");
+
+        if (!editMode) {
+            // ENTER EDIT MODE
+            editBtn.textContent = "Save";
+
+            names.forEach(span => {
+                const input = document.createElement("input");
+                input.type = "text";
+                input.value = span.textContent.trim();
+                input.classList.add("edit-input");
+                span.replaceWith(input);
+            });
+
+            values.forEach(span => {
+                const input = document.createElement("input");
+                input.type = "text";
+                input.value = span.textContent.trim();
+                input.classList.add("edit-input");
+                input.style.textAlign = "right";
+                span.replaceWith(input);
+            });
+
+            editMode = true;
+        } else {
+            // SAVE MODE
+            editBtn.textContent = "Manage/Edit";
+
+            const inputs = document.querySelectorAll(".edit-input");
+
+            inputs.forEach(input => {
+                const span = document.createElement("span");
+                span.textContent = input.value.trim();
+                span.className = input.style.textAlign === "right" 
+                    ? "product-value" 
+                    : "product-name";
+                input.replaceWith(span);
+            });
+
+            editMode = false;
+        }
+    });
+    </script>
+</body>
+</html>

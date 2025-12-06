@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FARM – Digital Market</title>
+    <link rel="stylesheet" href="Homepage.css" />
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="logo">
+            <img src="FARMLogo.png" alt="Farm Logo">
+        </div>
+
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="AboutPage.html">About</a></li>
+            <li><a href="ContactPage.html">Contact Us</a></li>
+        </ul>
+    </nav>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="overlay"></div>
+
+        <div class="hero-content">
+            <header>Ready to bring your farm into the digital market?</header>
+            <p>F.A.R.M provides the platform, data insights, and tools needed to streamline sales and optimize your choices.</p>
+            <a href="UserType.html" class="hero-btn">Get Started</a>
+        </div>
+    </section>
+
+    <script>
+        // Homepage → Get Started Button
+        const startBtn = document.getElementById("getStartedBtn");
+
+        if (startBtn) {
+            startBtn.addEventListener("click", () => {
+                window.location.href = "UserType.html";
+            });
+        }
+    </script>
+</body>
+</html>

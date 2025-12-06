@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Farmer Profile – F.A.R.M</title>
+    <link rel="stylesheet" href="FarmerViewProfile.css">
+</head>
+
+<body>
+
+<div class="container">
+    <!-- Header with logo and breadcrumb -->
+    <div class="header">
+        <div class="logo" aria-label="Farm Logo">
+            <img src="FARMLogo.png" alt="Farm Logo" />
+        </div>
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+            Profile <span>›</span> <span id="farmName">GLAM Farm</span>
+        </nav>
+        <button class="dashboard-button" title="Go to Dashboard" aria-label="Go to Dashboard">
+            <img src="dashboard-icon.png" alt="Dashboard" />
+        </button>
+    </div>
+
+    <!-- Divider below header -->
+    <div class="header-divider"></div>
+</div>
+
+<!-- MESSAGE AREA -->
+<div id="message" class="message"></div>
+
+<!-- Profile main section -->
+<section class="profile-section" aria-label="Farm Profile Details">
+    <div class="profile-left">
+        <div class="avatar" aria-label="Profile Picture">
+            <img id="profileImage" src="user-icon.png" alt="GLAM Farm Profile Picture" />
+        </div>
+        <div class="profile-info">
+            <h1 id="businessName">GLAM Farm</h1>
+            <small id="location">Golden Country Homes, Alangilan, Batangas City, Batangas</small>
+            <small id="joinedDate">Joined 11/20/2025</small>
+            <small id="emailAddress">farmer@example.com</small> <!-- Added email field -->
+
+            <div class="subinfo" aria-label="Review stats">
+                <div class="stats" aria-label="Number of Reviews">
+                    <span id="reviewCount">0</span> <small>Reviews</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="profile-right" aria-label="Farm Description and Stats">
+        <div class="description">
+            <strong>Description</strong><br />
+            <p id="description">Lorem ipsum dolor sit amet consectetur adipiscing elit. Amet consectetur adipiscing elit quisque faucibus ex sapien. Quisque faucibus ex sapien vitae pellentesque sem placerat. Vitae pellentesque sem placerat in id cursus mi.</p>
+        </div>
+        <div class="categories-section">
+            <strong>Crop Categories</strong><br />
+            <div id="cropCategories" class="categories-container">
+                <!-- Categories will be displayed here -->
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Tabs with Manage/Edit -->
+<div class="tabs" role="tablist" aria-label="Profile Tabs">
+    <div id="crops-tab" class="tab active" role="tab" aria-controls="crops-panel" tabindex="0" aria-selected="true">Crops</div>
+    <div id="reviews-tab" class="tab" role="tab" aria-controls="reviews-panel" tabindex="-1" aria-selected="false">Reviews</div>
+</div>
+
+<!-- Tab panels -->
+<section id="crops-panel" role="tabpanel" tabindex="0" aria-labelledby="crops-tab">
+    <div id="manage-edit" class="manage-edit" tabindex="0" role="button" aria-pressed="false" aria-label="Manage or edit crop items">Manage/Edit</div>
+    <div class="card-list" id="crops-list">
+        
+        <!-- ADD CROP CARD -->
+        <article id="add-crop-card" class="card" tabindex="0" aria-label="Add Crop">
+            <div class="card-img">
+                <div class="add-crop-icon" aria-hidden="true">+</div>
+            </div>
+            <div class="add-crop-text">Add Crop</div>
+        </article>
+
+        <!-- ADD + EDIT CROP MODAL -->
+        <div id="addCropModal" class="modal" aria-hidden="true">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2 id="modalTitle">Add New Crop</h2>
+
+                <form id="addCropForm">
+
+                    <label>Product Name</label>
+                    <input type="text" name="cropName" required>
+
+                    <label>Description</label>
+                    <textarea name="cropDescription" required></textarea>
+
+                    <label>Price per Kg</label>
+                    <input type="number" name="cropPrice" min="0" step="0.01" required>
+
+                    <label>Upload Image</label>
+                    <input type="file" name="cropImage" accept="image/*">
+                    <small class="file-format-info">Accepted formats: JPEG, PNG, GIF, WebP (Max 5MB)</small>
+
+                    <button class="submit-btn" type="submit">Add</button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<section id="reviews-panel" role="tabpanel" tabindex="0" aria-labelledby="reviews-tab" class="reviews-container" hidden>
+    <div class="reviews-header">
+        <h3>Customer Reviews</h3>
+    </div>
+    <div id="reviews-list" class="reviews-list">
+        <!-- Reviews will be loaded here -->
+    </div>
+</section>
+
+<!-- Supabase Client -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0"></script>
+<script src="FarmerViewProfile.js"></script>
+
+</body>
+</html>
+
+
+

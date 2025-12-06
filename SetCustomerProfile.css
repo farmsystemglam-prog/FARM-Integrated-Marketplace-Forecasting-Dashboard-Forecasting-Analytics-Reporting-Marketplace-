@@ -1,0 +1,251 @@
+/* ================================
+   GLOBAL
+================================ */
+body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background: #F5F5F5;
+    display: flex;
+}
+
+
+/* ================================
+   SIDEBAR
+================================ */
+.sidebar {
+    width: 180px;
+    height: 100vh;
+    background: #EEEEEE;
+    border-right: 1px solid #AAB1AD;
+    padding-top: 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+.sidebar .logo {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.sidebar .logo img {
+    width: 85px;   /* adjust size here */
+    height: auto;
+}
+
+.sidebar nav {
+    display: flex;
+    flex-direction: column;
+    margin-top: 30px;
+    padding: 0 15px;
+}
+
+.sidebar nav a {
+    padding: 14px 25px;
+    text-decoration: none;
+    font-size: 15px;
+    color: #31694E;
+    transition: background 0.2s;
+}
+
+.sidebar nav a.active {
+    background: #F0E89A;
+    border-radius: 6px;
+    font-weight: bold;
+    color: #658C58;
+}
+
+/* ================================
+   CONTENT AREA
+================================ */
+.content {
+    flex: 1;
+    margin-left: 180px; /* sidebar width */
+    padding: 30px 50px;
+}
+
+.top-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    color: #31694E;
+}
+
+.top-header .icons img {
+    width: 28px;
+    margin-left: 12px;
+}
+
+/* ================================
+   PROFILE CARD
+================================ */
+.profile-card {
+    background: #FFF;
+    padding: 40px;
+    border-radius: 12px;
+    border: 1px solid #ddd;
+    max-width: 1100px;
+    margin: auto;
+}
+
+.title {
+    margin-bottom: 5px;
+    color: #31694E;
+    font-size: 35px;
+}
+
+.subtitle {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 15px;
+}
+
+hr {
+    margin: 25px 0;
+    border: none;
+    border-top: 1px solid #ddd;
+}
+
+/* ================================
+   LAYOUT (Two Columns)
+================================ */
+.profile-layout {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 55px;
+}
+
+.form-section {
+    width: 60%;
+    padding-left: 20px; /* NEW */
+}
+
+.image-section {
+    width: 35%;
+    text-align: center;
+}
+
+/* ================================
+   INPUT FIELDS
+================================ */
+label {
+    font-size: 14px;
+    color: #444;
+    font-weight: 600;
+    display: block;
+    margin-bottom: 9px;
+}
+
+input, select {
+    width: 100%;
+    padding: 11px;
+    margin-bottom: 20px;
+    border-radius: 6px;
+    border: 1px solid #CFCFCF;
+    background: #FAFAFA;
+    font-size: 14px;
+}
+
+
+.dob {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+/* Fix DOB dropdown width */
+.dob select {
+    width: 120px;       /* Adjust to your preferred size */
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+
+/* ================================
+   BUTTONS
+================================ */
+.save-btn {
+    background: #648E4B;
+    color: #fff;
+    padding: 12px 35px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 15px;
+    margin-top: 10px;
+}
+
+.save-btn:hover {
+    background: #557C40;
+}
+
+.select-img-btn {
+    margin-top: 15px;
+    padding: 10px 20px;
+    border: 1px solid #aaa;
+    background: #fff;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+/* ================================
+   PROFILE IMAGE
+================================ */
+.profile-pic {
+    width: 230px;
+    height: 230px;
+    background: #ddd;
+    border-radius: 50%;
+    margin: auto;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+
+.file-info {
+    font-size: 12px;
+    color: #666;
+    margin-top: 15px;
+}
+
+/* ================================
+   FIXED GENDER ONE-LINE LAYOUT
+================================ */
+.gender-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 18px;
+    gap: 20px; /* Space between "Gender" and the options */
+}
+
+.gender-label {
+    width: 110px;  /* Aligns with Username, Name, Address labels */
+    font-size: 14px;
+    font-weight: 600;
+    color: #444;
+    margin-bottom: 0; /* Important: prevent shifting */
+}
+
+.gender-options {
+    display: flex;
+    align-items: center;
+    gap: 35px; /* space between Male / Female / Other */
+}
+
+.gender-options label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: normal;
+}
+
+/* Make sure radio button stays centered */
+.gender-options input[type="radio"] {
+    margin: 0;
+    vertical-align: middle;
+}

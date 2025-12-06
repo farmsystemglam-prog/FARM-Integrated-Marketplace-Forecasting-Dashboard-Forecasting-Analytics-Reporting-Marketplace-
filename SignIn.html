@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Sign In – F.A.R.M</title>
+  <link rel="stylesheet" href="SignInUp.css">
+</head>
+<body>
+
+  <div class="auth-page">
+    <div class="auth-card">
+      <div class="auth-inner">
+        <a href="UserType.html" class="back-btn">BACK</a>
+        <h1 class="auth-title">Sign In</h1>
+        <p class="auth-sub">Welcome back! Please enter your details</p>
+        <p class="selected-role-text"> 
+          You are signing in as: <span id="roleDisplay"></span>
+        </p>
+
+        <!-- Regular Sign-in Form -->
+        <form id="regularSigninForm" class="signin-form" novalidate>
+          <div class="field">
+            <label for="email">Email</label>
+            <input id="email" type="email" required>
+          </div>
+
+          <div class="field">
+            <label for="password">Password</label>
+            <input id="password" type="password" required>
+          </div>
+
+          <div class="options-row">
+            <label class="remember-me">
+              <input type="checkbox" />
+              <span>Remember me for 30 days</span>
+            </label>
+
+            <a href="#" class="forgot-link">Forgot Password?</a>
+          </div>
+
+          <button type="submit" class="primary-btn">Sign In</button>
+
+          <p id="signupSection" class="signup-text">
+            Don't have an account?
+            <a href="SignUp.html" class="signup-link">Sign Up</a>
+          </p>
+        </form>
+
+        <!-- Admin Sign-in Form (Hidden by default) -->
+        <form id="adminSigninForm" class="signin-form admin-form" novalidate style="display: none;">
+          <div class="field">
+            <label for="adminPassword">Admin Password</label>
+            <input id="adminPassword" type="password" placeholder="Enter admin password" required>
+          </div>
+
+          <button type="submit" class="primary-btn">Sign In</button>
+
+          <!-- Back to regular sign in link (conditionally shown) -->
+          <p id="backToRegular" class="back-link" style="display: none;">
+            <a href="#" onclick="showRegularSignin()">Back to regular sign in</a>
+          </p>
+        </form>
+        
+        <!-- Error and Success Messages -->
+        <div id="error-message" class="error-message auth-message">Error message will appear here</div>
+        <div id="success-message" class="success-message auth-message">Success message will appear here</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Supabase Client -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0"></script>
+  <script>
+    // Supabase configuration
+    const SUPABASE_URL = 'https://nzpwmhshnfvwrbkhraed.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im56cHdtaHNobmZ2d3Jia2hyYWVkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM1MzcyMTMsImV4cCI6MjA3OTExMzIxM30.IPQzkj0iuTEaxsmgY1fFva916rKcwaEfaAiBQhJHb_o';
+
+    // Initialize Supabase
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const roleDisplay = document.getElementById("roleDisplay");
+        const regularSigninForm = document.getElementById("regularSigninForm");
+        const adminSigninForm = document.getElementById("adminSigninForm");
+        const backToRegular = document.getElementById("backToRegular");
+        
+        // Get selected role from localStorage
+        const selectedRole = localStorage.getItem("selectedRole") || "customer";
+        
+        // Display selected role
+        roleDisplay.textContent = selectedRole.charAt(0).toUpperCase() + selectedRole.slice(1);
+        
+        // If admin role is selected, show admin sign-in form
+        if (selectedRole === "admin") {
+            showAdminSignin();
+        }
+        
+        // Regular Sign-in Form
+        if (regularSigninForm) {
+            regularSigninForm.addEventListener("submit", async (e) => {
+                e.preventDefault();
+                
+                const email = document.getElementById("email").value.trim();
+                const password = document.getElementById("password").value.trim();
+                
+                if (!email || !password) {
+                    showError("Please enter both email and password.");
+                    return;
+                }
+                
+                try {
+                    // Regular sign-in with Supabase
+                    const { data, error } = await supabase.auth.signInWithPassword({
+                        email,
+                        password
+                    });
+                    
+                    if (error) {
+                        showError("Sign In Error: " + error.message);
+                        return;
+                    }
+                    
+                    // Get user role from profiles table
+                    const { data: profile, error: profileError } = await supabase
+                        .from('profiles')
+                        .select('role')
+                        .eq('id', data.user.id)
+                        .single();
+                    
+                    if (profileError) {
+                        showError("Profile fetch error: " + profileError.message);
+                        return;
+                    }
+                    
+                    const userRole = profile.role || "customer";
+                    
+                    // Redirect based on role
+                    handleRedirect(userRole);
+                    
+                } catch (error) {
+                    showError("An unexpected error occurred: " + error.message);
+                }
+            });
+        }
+        
+        // Admin Sign-in Form
+        if (adminSigninForm) {
+            adminSigninForm.addEventListener("submit", async (e) => {
+                e.preventDefault();
+                const adminPassword = document.getElementById("adminPassword").value.trim();
+                
+                if (!adminPassword) {
+                    showError("Please enter admin password.");
+                    return;
+                }
+                
+                try {
+                    // For admin sign-in, validate password
+                    if (adminPassword === "FarmAdmin") {
+                        // Sign in as admin using the admin account
+                        const { data, error } = await supabase.auth.signInWithPassword({
+                            email: "farmsystemglam@gmail.com",
+                            password: "FarmAdmin"
+                        });
+                        
+                        if (error) {
+                            showError("Admin Sign In Error: " + error.message);
+                            return;
+                        }
+                        
+                        // Redirect to admin dashboard
+                        showSuccess("Admin sign in successful!");
+                        setTimeout(() => {
+                            window.location.href = "AdminDashboard.html";
+                        }, 1500);
+                    } else {
+                        showError("Invalid admin password.");
+                    }
+                    
+                } catch (error) {
+                    showError("An unexpected error occurred: " + error.message);
+                }
+            });
+        }
+    });
+
+    // Function to show admin sign-in form
+    function showAdminSignin() {
+        document.getElementById("regularSigninForm").style.display = "none";
+        document.getElementById("adminSigninForm").style.display = "block";
+        // Show the "Back to regular sign in" link
+        document.getElementById("backToRegular").style.display = "block";
+    }
+
+    // Function to show regular sign-in form
+    function showRegularSignin() {
+        document.getElementById("regularSigninForm").style.display = "block";
+        document.getElementById("adminSigninForm").style.display = "none";
+        // Hide the "Back to regular sign in" link
+        document.getElementById("backToRegular").style.display = "none";
+    }
+
+    // Function to handle redirection based on user role
+    function handleRedirect(userRole) {
+        switch (userRole) {
+            case "customer":
+                window.location.href = "FarmerDirectory.html";
+                break;
+            case "farmer":
+                window.location.href = "FarmerViewProfile.html";
+                break;
+            case "admin":
+                window.location.href = "AdminDashboard.html";
+                break;
+            default:
+                window.location.href = "SignIn.html";
+        }
+    }
+
+    // Utility functions for showing messages
+    function showError(message) {
+        const errorMessage = document.getElementById("error-message");
+        const successMessage = document.getElementById("success-message");
+        
+        errorMessage.textContent = message;
+        errorMessage.style.display = 'block';
+        successMessage.style.display = 'none';
+        
+        // Auto-hide after 5 seconds
+        setTimeout(() => {
+            errorMessage.style.display = 'none';
+        }, 5000);
+    }
+
+    function showSuccess(message) {
+        const errorMessage = document.getElementById("error-message");
+        const successMessage = document.getElementById("success-message");
+        
+        successMessage.textContent = message;
+        successMessage.style.display = 'block';
+        errorMessage.style.display = 'none';
+        
+        // Auto-hide after 3 seconds
+        setTimeout(() => {
+            successMessage.style.display = 'none';
+        }, 3000);
+    }
+  </script>
+</body>
+</html>

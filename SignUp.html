@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Sign Up – F.A.R.M</title>
+    <link rel="stylesheet" href="SignInUp.css">
+</head>
+<body>
+  <div class="auth-page">
+    <div class="auth-card">
+      <a href="SignIn.html" class="back-btn">BACK</a>
+
+      <div class="auth-inner">
+        <h1 class="auth-title">Sign Up</h1>
+        <p class="auth-sub">Enter your details and start your journey!</p>
+        
+        <!-- Role Display -->
+        <div class="role-display" style="margin-bottom: 20px;">
+          <strong>Registering as:</strong> <span id="roleDisplay">Customer</span>
+        </div>
+
+        <form class="signup-form" id="signupForm" novalidate>
+          <div class="row name-row">
+            <div class="col">
+              <label>First Name</label>
+              <input type="text" id="firstName" required>
+            </div>
+            <div class="col">
+              <label>Last Name</label>
+              <input type="text" id="lastName" required>
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Address</label>
+            <input type="text" id="address" required>
+          </div>
+
+          <div class="field">
+            <label>Email</label>
+            <input type="email" id="email" required>
+          </div>
+
+          <div class="field">
+            <label>Password</label>
+            <input type="password" id="password" required>
+            <small class="password-hint">Minimum 8 characters</small>
+          </div>
+
+          <div class="field">
+            <label>Repeat Password</label>
+            <input type="password" id="password2" required>
+          </div>
+
+          <button class="primary-btn" type="submit">Sign Up</button>
+        </form>
+        
+        <div id="error-message" class="error-message" style="display: none;"></div>
+        <div id="success-message" class="success-message" style="display: none;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Supabase Client -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0"></script>
+  <script>
+    // Supabase configuration
+    const SUPABASE_URL = 'https://nzpwmhshnfvwrbkhraed.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im56cHdtaHNobmZ2d3Jia2hyYWVkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM1MzcyMTMsImV4cCI6MjA3OTExMzIxM30.IPQzkj0iuTEaxsmgY1fFva916rKcwaEfaAiBQhJHb_o';
+
+    // Initialize Supabase
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const form = document.getElementById("signupForm");
+      const roleDisplay = document.getElementById("roleDisplay");
+      const errorMessage = document.getElementById("error-message");
+      const successMessage = document.getElementById("success-message");
+      
+      // Get selected role from localStorage with fallback to customer
+      const role = localStorage.getItem("selectedRole") || "customer";
+      
+      // Display selected role
+      if (roleDisplay) {
+        roleDisplay.textContent = role.charAt(0).toUpperCase() + role.slice(1);
+        roleDisplay.style.color = role === "admin" ? "#d32f2f" : "#388e3c";
+      }
+
+      if (form) {
+        form.addEventListener("submit", async (e) => {
+          e.preventDefault(); // prevent default HTML submission
+
+          // Hide previous messages
+          errorMessage.style.display = 'none';
+          successMessage.style.display = 'none';
+
+          // Get form values
+          const firstName = document.getElementById("firstName").value.trim();
+          const lastName = document.getElementById("lastName").value.trim();
+          const address = document.getElementById("address").value.trim();
+          const email = document.getElementById("email").value.trim();
+          const password = document.getElementById("password").value.trim();
+          const password2 = document.getElementById("password2").value.trim();
+
+          // Validation: ensure all required fields are filled
+          if (!firstName || !lastName || !address || !email || !password || !password2) {
+            showError("Please fill all required fields.");
+            return;
+          }
+
+          // Validate email format
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          if (!emailRegex.test(email)) {
+            showError("Please enter a valid email address.");
+            return;
+          }
+
+          // Check if password and repeat password match
+          if (password !== password2) {
+            showError("Passwords do not match.");
+            return;
+          }
+
+          // Password strength check (minimum 8 characters)
+          if (password.length < 8) {
+            showError("Password must be at least 8 characters long.");
+            return;
+          }
+
+          try {
+            // Show loading state
+            const submitButton = form.querySelector('button[type="submit"]');
+            const originalText = submitButton.textContent;
+            submitButton.disabled = true;
+            submitButton.textContent = "Creating Account...";
+
+            // First, try to sign up with metadata
+            console.log("Attempting signup with metadata...");
+            const { data, error } = await supabase.auth.signUp({
+              email,
+              password,
+              options: {
+                data: {
+                  first_name: firstName,
+                  last_name: lastName,
+                  address: address,
+                  role: role
+                }
+              }
+            });
+
+            if (error) {
+              console.error("Signup error:", error);
+              
+              // Handle specific error messages
+              if (error.message.includes('already registered')) {
+                showError("This email is already registered. Please sign in instead.");
+              } else if (error.message.includes('Database error')) {
+                // Try alternative approach if database error occurs
+                console.log("Database error detected, trying alternative method...");
+                await handleDatabaseError(firstName, lastName, address, email, password, role);
+                return;
+              } else {
+                showError("Sign up failed: " + error.message);
+              }
+              return;
+            }
+
+            // Handle success
+            console.log("Signup successful:", data);
+            showSuccess("Sign up successful! Redirecting...");
+            
+            // Clear the selected role from localStorage
+            localStorage.removeItem('selectedRole');
+            
+            // Redirect based on role
+            setTimeout(() => {
+              switch (role) {
+                case "customer":
+                  window.location.href = "SetCustomerProfile.html";
+                  break;
+                case "farmer":
+                  window.location.href = "SetFarmerProfile.html";
+                  break;
+                case "admin":
+                  window.location.href = "AdminDashboard.html";
+                  break;
+                default:
+                  window.location.href = "SignIn.html";
+              }
+            }, 2000);
+
+          } catch (error) {
+            console.error("Sign up error:", error);
+            showError("An unexpected error occurred: " + error.message);
+          } finally {
+            // Reset button state
+            submitButton.disabled = false;
+            submitButton.textContent = originalText;
+          }
+        });
+      }
+    });
+
+    // Alternative signup method for database errors
+    async function handleDatabaseError(firstName, lastName, address, email, password, role) {
+      try {
+        console.log("Trying alternative signup method...");
+        
+        // First, try to sign up without metadata
+        const { data, error } = await supabase.auth.signUp({
+          email,
+          password
+        });
+
+        if (error) {
+          throw error;
+        }
+
+        // If signup successful, check if profile already exists
+        if (data.user) {
+          console.log("User created, checking if profile exists...");
+          
+          // Check if profile already exists for this user
+          const { data: existingProfile, error: checkError } = await supabase
+            .from('profiles')
+            .select('id')
+            .eq('id', data.user.id)
+            .single();
+            
+          if (checkError && checkError.code !== 'PGRST116') {
+            // If error is not "no rows returned", throw the error
+            throw checkError;
+          }
+          
+          if (existingProfile) {
+            // Profile exists, update it instead of inserting
+            console.log("Profile exists, updating...");
+            const { error: updateError } = await supabase
+              .from('profiles')
+              .update({
+                first_name: firstName,
+                last_name: lastName,
+                address: address,
+                role: role,
+                email: email
+              })
+              .eq('id', data.user.id);
+              
+            if (updateError) {
+              throw updateError;
+            }
+          } else {
+            // Profile doesn't exist, create it
+            console.log("Creating new profile...");
+            const { error: profileError } = await supabase
+              .from('profiles')
+              .insert({
+                id: data.user.id,
+                first_name: firstName,
+                last_name: lastName,
+                address: address,
+                role: role,
+                email: email
+              });
+
+            if (profileError) {
+              throw profileError;
+            }
+          }
+
+          console.log("Profile updated/created successfully");
+          // Handle success
+          showSuccess("Sign up successful! Redirecting...");
+          
+          // Clear the selected role from localStorage
+          localStorage.removeItem('selectedRole');
+          
+          // Redirect based on role
+          setTimeout(() => {
+            switch (role) {
+              case "customer":
+                window.location.href = "SetCustomerProfile.html";
+                break;
+              case "farmer":
+                window.location.href = "SetFarmerProfile.html";
+                break;
+              case "admin":
+                window.location.href = "AdminDashboard.html";
+                break;
+              default:
+                window.location.href = "SignIn.html";
+            }
+          }, 2000);
+        }
+      } catch (error) {
+        console.error("Alternative signup error:", error);
+        showError("Sign up failed: " + error.message);
+      }
+    }
+
+    // Utility functions for showing messages
+    function showError(message) {
+      const errorMessage = document.getElementById("error-message");
+      errorMessage.textContent = message;
+      errorMessage.style.display = 'block';
+      
+      // Auto-hide after 5 seconds
+      setTimeout(() => {
+        errorMessage.style.display = 'none';
+      }, 5000);
+    }
+
+    function showSuccess(message) {
+      const successMessage = document.getElementById("success-message");
+      successMessage.textContent = message;
+      successMessage.style.display = 'block';
+      
+      // Auto-hide after 3 seconds
+      setTimeout(() => {
+        successMessage.style.display = 'none';
+      }, 3000);
+    }
+  </script>
+</body>
+</html>
